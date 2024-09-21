@@ -22,7 +22,7 @@ $id = null;
 if (isset($_GET['id'])) {
     $id = filter_var($_GET['id'], FILTER_VALIDATE_INT, [
         'options' => [
-            'default' => 'all_categories',
+            'default' => 'all_bookmarks',
             'min_range' => 1
         ]
     ]);
@@ -30,7 +30,7 @@ if (isset($_GET['id'])) {
 
 try {
 
-    $sql = is_numeric($id) ? "SELECT * FROM `categories` WHERE id='$id'" : "SELECT * FROM `categories` ORDER BY category_name";
+    $sql = is_numeric($id) ? "SELECT * FROM `bookmarks` WHERE bookmarkID='$id'" : "SELECT * FROM `bookmarks`";
     
 
     $stmt = $conn->prepare($sql);

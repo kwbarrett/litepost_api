@@ -3,7 +3,7 @@ class Operations
 {
  
     private $db_host = 'localhost';
-    private $db_name = 'litepost';
+    private $db_name = 'ang-blog';
     private $db_username = 'root';
     private $db_password = 'mysql';
  
