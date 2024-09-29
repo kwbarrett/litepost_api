@@ -46,16 +46,22 @@ try {
     $fetch_stmt->execute();
 
     if ($fetch_stmt->rowCount() > 0) :
-
+        $post = $fetch_stmt->fetch(PDO::FETCH_ASSOC);
+        $imageSrcPath = $post['postImgPath'];
+        $pathParts = explode('/', $imageSrcPath);
+        $filename = end($pathParts);
+        $filePath = "/Applications/AMPPS/www/ang-blog-api/uploaded_files/ $filename";
         $delete_post = "DELETE FROM `posts` WHERE id=:id";
         $delete_post_stmt = $conn->prepare($delete_post);
         $delete_post_stmt->bindValue(':id', $id,PDO::PARAM_INT);
 
         if ($delete_post_stmt->execute()) {
-
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
             echo json_encode([
                 'success' => 1,
-                'message' => 'Record Deleted successfully'
+                'message' => "Record Deleted successfully - $filePath"
             ]);
             exit;
         }

@@ -63,6 +63,7 @@ try {
         $fileTmpPath = $_FILES['postImg']['tmp_name'];
         $fileName = $_FILES['postImg']['name'];
         $uploadFileDir = '../uploaded_files/';
+        
         $dest_path = $uploadFileDir . $fileName;
     
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
