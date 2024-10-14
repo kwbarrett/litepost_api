@@ -50,7 +50,7 @@ try {
         $imageSrcPath = $post['postImgPath'];
         $pathParts = explode('/', $imageSrcPath);
         $filename = end($pathParts);
-        $filePath = "/Applications/AMPPS/www/ang-blog-api/uploaded_files/ $filename";
+        $filePath = "/Applications/AMPPS/www/ang-blog-api/uploaded_files/$filename";
         $delete_post = "DELETE FROM `posts` WHERE id=:id";
         $delete_post_stmt = $conn->prepare($delete_post);
         $delete_post_stmt->bindValue(':id', $id,PDO::PARAM_INT);
@@ -61,7 +61,7 @@ try {
             }
             echo json_encode([
                 'success' => 1,
-                'message' => "Record Deleted successfully - $filePath"
+                'message' => "Record Deleted successfully!"
             ]);
             exit;
         }

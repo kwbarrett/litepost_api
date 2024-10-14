@@ -4,20 +4,6 @@ header("Access-Control-Allow-Headers: access");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=UTF-8");
-// header("Access-Control-Allow-Origin: http://localhost:4200");
-// header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
-// header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-// header("Access-Control-Allow-Credentials: true");
-// header("Content-Type: application/json; charset=UTF-8");
-
-// if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-//     header("Access-Control-Allow-Origin: http://localhost:4200");
-//     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization");
-//     header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-//     header("Access-Control-Allow-Credentials: true");
-//     exit(0);
-// }
-  
 
 error_reporting(E_ERROR);
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') :
@@ -34,6 +20,10 @@ $database = new Operations();
 $conn = $database->dbConnection();
 $id = null;
 $category_id = null;
+$latest = '';
+if( isset( $_GET['latest'] ) ){
+    $latest = 'ORDER BY p.createdAt DESC LIMIT 3';
+}
 
 if (isset($_GET['id'])) {
     $id = filter_var($_GET['id'], FILTER_VALIDATE_INT, [
@@ -111,11 +101,9 @@ try {
                     FROM
                         posts p
                     INNER JOIN categories c on p.category_id = c.id
-                    ORDER BY
-                        p.createdAt DESC";
+                    $latest";
     }
     
-
     $stmt = $conn->prepare($sql);
 
     $stmt->execute();
@@ -140,7 +128,7 @@ try {
                     'isFeatured' => (bool) $data['isFeatured'],
                     'views' => (int) $data['views'],
                     'status' => $data['status'],
-                    'createdAt' => $post['createdAt']
+                    'createdAt' => $data['createdAt']
                 ];
                 echo json_encode(['success' => 1, 'data' => $formattedPost]);
             } else {
@@ -179,7 +167,7 @@ try {
                 'success' => 0,
                 'message' => 'No Record Found!',
             ]);
-        endif;
+    endif;
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([

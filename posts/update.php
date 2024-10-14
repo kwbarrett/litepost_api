@@ -27,7 +27,7 @@ $conn = $database->dbConnection();
 if (!isset($_POST['postData'])) {
     echo json_encode([
         'success' => 0,
-        'message' => 'Please enter compulsory fields | Title, Permalink, Content, Category'
+        'message' => "Please enter compulsory fields | Title, Permalink, Content, Category$_POST"
     ]);
     exit;
 }
